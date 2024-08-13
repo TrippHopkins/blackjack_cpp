@@ -1,8 +1,9 @@
 #include <iostream>
-#include <unistd.h>
+#include <stdlib.h>
 #include <array>
 #include <vector>
 #include <random>
+#include <string>
 
 
 //    std::mt19937 gen(randnum());
@@ -19,9 +20,11 @@ class GameUti{
     public:
         double Money;
         double Bet;
+        int i = 2;
         std::random_device randnum;
         std::vector<card> dealer_hand;
         std::vector<card> player_hand;
+        std::string HOS;
         std::array<card, 13> cards {{
             {1, card_t::Ace},
             {2, card_t::num},
@@ -37,20 +40,87 @@ class GameUti{
             {10, card_t::Queen},
             {10, card_t::King},
         }};
+        
         void start();
         void add_dealer_card();
         void add_player_card();
+        std::string type_to_string(card_t type);
+        std::string Hit_or_stay(std::string HOS);
 };
 
 void GameUti::start(){
     std::cout << "************************** WELCOME TO THE TABLE **************************\n";
-    std::cout << "Balence: " << Money << '\n';
-    std::cout << "What Would you like to bet? \n";
+    std::cout << "Balence: $" << Money << '\n';
+    std::cout << "What Would you like to bet? \n$";
     std::cin >> Bet;
     std::cout << "\n************************** Distributing Cards ****************************\n";
-    std::cout << "DEALERS ShOWING" << dealer_hand[0].type;
 
+    add_dealer_card();
+    add_player_card();
+    add_player_card();
 
+    std::cout << "DEALER'S SHOWING: ";
+    if(dealer_hand[0].type != card_t::num){
+        std::cout << type_to_string(dealer_hand[0].type);
+    }
+    else if(dealer_hand[0].type == card_t::num){
+        std::cout << dealer_hand[0].value;
+    }
+
+    std::cout << '\n' << "YOUR FIRST CARD: ";
+    if(player_hand[0].type != card_t::num){
+        std::cout << type_to_string(player_hand[0].type);
+    }
+    else if(player_hand[0].type == card_t::num){
+        std::cout << player_hand[0].value;
+    }
+
+    std::cout << '\n' << "YOUR SECOND CARD: ";
+    if(player_hand[1].type != card_t::num){
+        std::cout << type_to_string(player_hand[1].type);
+    }
+    else if(player_hand[1].type == card_t::num){
+        std::cout << player_hand[1].value;
+    }
+
+    std::cout << '\n';
+    std::cout << "YOUR TOTAL AMOUNT: " << (player_hand[0].value + player_hand[1].value);
+    do{
+    std::cout << '\n' << "Please type 1 to Hit or 0 to stay: ";
+    std::cin >> HOS;
+    if(GameUti::Hit_or_stay(HOS) == "Hit"){
+        add_player_card();
+        if(player_hand[i].type != card_t::num){
+            std::cout << type_to_string(player_hand[i].type);
+        }
+        else if(player_hand[i].type == card_t::num){
+            std::cout << player_hand[i].value;
+        }
+        i = i + 1;
+        sizeof(player_hand)/sizeof(player_hand[0]);
+    }
+    }while(Hit_or_stay(HOS) == "Hit");
+
+}
+std::string GameUti::type_to_string(card_t type){
+    switch(type){
+        case card_t::Ace: return "Ace";
+        case card_t::King: return "King";
+        case card_t::Queen: return "Queen";
+        case card_t::Jack: return "Jack";
+        default: return "Unknown";
+    }
+    }
+std::string GameUti::Hit_or_stay(std::string HOS){
+    if(HOS == "1"){
+        return "Hit";
+    }
+    else if(HOS == "0"){
+        return "Stay";
+    }else{
+        return "Hit";
+    }
+    
 }
 void GameUti::add_dealer_card(){
     std::mt19937 gen(randnum());

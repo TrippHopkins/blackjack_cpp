@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include <unistd.h>
+#include <stdlib.h>
 
 int money = 100;
 
@@ -21,6 +21,8 @@ int main(){
     std::string optshowingDealCard4;
 
 
+    srand(time(0));
+
     int bet;
     int dealCard1 = rand() % 12 + 2;
     switch(dealCard1){
@@ -35,6 +37,7 @@ int main(){
         default: showingDealCard1 = std::to_string(dealCard1);
             break;
     }
+    _sleep(1);
     int dealCard2 = rand() % 12 + 2;
     switch(dealCard2){
         case 11: showingDealCard2 = "Jack";
@@ -48,6 +51,7 @@ int main(){
         default: showingDealCard2 = std::to_string(dealCard2);
             break;
     }
+    _sleep(1);
     int dealCard3 = rand() % 12 + 2;
     switch(dealCard3){
         case 11: optshowingDealCard3 = "Jack";
@@ -61,7 +65,7 @@ int main(){
         default: optshowingDealCard3 = std::to_string(dealCard3);
             break;
     }
-    
+    _sleep(1);
     int dealCard4 = rand() % 12 + 2;
     switch(dealCard4){
         case 11: optshowingDealCard4 = "Jack";
@@ -75,7 +79,7 @@ int main(){
         default: optshowingDealCard4 = std::to_string(dealCard4);
             break;
     }
-
+    _sleep(1);
     int playerCard1 = rand() % 12 + 2;
     switch(playerCard1){
         case 11: showingPlayCard1 = "Jack";
@@ -89,7 +93,7 @@ int main(){
         default: showingPlayCard1 = std::to_string(playerCard1);
             break;
     }
-
+    _sleep(1);
     int playerCard2 = rand() % 12 + 2;
     switch(playerCard2){
         case 11: showingPlayCard2 = "Jack";
@@ -103,7 +107,7 @@ int main(){
         default: showingPlayCard2 = std::to_string(playerCard2);
             break;
     }
-    
+    _sleep(1);    
     int playerCard3 = rand() % 12 + 2;
     switch(playerCard3){
         case 11: optshowingPlayCard3 = "Jack";
@@ -117,7 +121,7 @@ int main(){
         default: optshowingPlayCard3 = std::to_string(playerCard3);
             break;
     }
-
+    _sleep(1);
     int playerCard4 = rand() % 12 + 2;
     switch(playerCard4){
         case 11: optshowingPlayCard4 = "Jack";
@@ -131,7 +135,7 @@ int main(){
         default: optshowingPlayCard4 = std::to_string(playerCard4);
             break;
     }
-
+    _sleep(1);
     bool stay = 1;
 
     int DC1 =0;
@@ -175,7 +179,7 @@ int main(){
 
     std::cout << "$" << userBet(bet) << '\n';
     std::cout << "********** Distributing Cards **********\n";
-    sleep(2);
+    _sleep(2);
     std::cout << "Your Cards: " << showingPlayCard1 << " and " << showingPlayCard2 << '\n';
     std::cout << "Dealer is showing: " << showingDealCard1 << '\n' << '\n';
     
@@ -214,9 +218,9 @@ int main(){
             }
     }
 
-    sleep(1);
+    _sleep(1);
     std::cout << "Dealer's second card: " << showingDealCard2 << '\n';
-    sleep(1.37);
+    _sleep(1.37);
 
     if(DC1 + DC2 < 17){
         std::cout << "Dealer HITS!\n";
@@ -225,9 +229,9 @@ int main(){
                     DC3 = 10;
                 }
                 else{
-                    DC3 = stoi(optshowingDealCard3);
+                    DC3 = std::stoi(optshowingDealCard3);
                 }
-        sleep(3);
+        _sleep(3);
     }
 
     if(DC1 + DC2 + DC3 < 17){
@@ -239,7 +243,7 @@ int main(){
                 else{
                     DC4 = stoi(optshowingDealCard3);
                 }
-        sleep(3);
+        _sleep(3);
     }   
 
     int PlayerFinal = (PC1 + PC2 + PC3 + PC4);
