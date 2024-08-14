@@ -273,6 +273,7 @@ int main(){
         money = money + userBet(bet);
         std::cout << "Total Money; $" << money << '\n';
     }
+    
 
     return 0;
 
