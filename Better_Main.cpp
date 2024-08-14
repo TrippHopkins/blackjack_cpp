@@ -48,7 +48,7 @@ void GameUti::start(){
     std::cout << "What Would you like to bet? \n";
     std::cin >> Bet;
     std::cout << "\n************************** Distributing Cards ****************************\n";
-    std::cout << "DEALERS ShOWING" << dealer_hand[0].type;
+    std::cout << "DEALERS SHOWING" << dealer_hand[0].type;
 
 
 }
