@@ -45,6 +45,8 @@ class GameUti{
         void start();
         void add_dealer_card();
         void add_player_card();
+        void player_HitsOrStay(int playerSumTotal);
+        void dealer_HitsOrStay(int dealerSumTotal);
         std::string type_to_string(card_t type);
         std::string Hit_or_stay(std::string HOS);
 };
@@ -86,27 +88,11 @@ void GameUti::start(){
 
     std::cout << '\n';
     int playerSumTotal = (player_hand[0].value + player_hand[1].value);
+    int dealerSumTotal = (dealer_hand[0].value + dealer_hand[1].value);
     std::cout << "YOUR TOTAL AMOUNT: " << playerSumTotal;
-    do{
-    std::cout << '\n' << "Please type 1 to Hit or 0 to stay: ";
-    std::cin >> HOS;
-    if(GameUti::Hit_or_stay(HOS) == "Hit"){
-        add_player_card();
-        if(player_hand[i].type != card_t::num){
-            std::cout << "New Card: " << type_to_string(player_hand[i].type);
-        }
-        else if(player_hand[i].type == card_t::num){
-            std::cout << "New Card: " << player_hand[i].value;
-        }
-        playerSumTotal = playerSumTotal + player_hand[i].value;
-        std::cout << "\nNew Total: " << playerSumTotal << '\n';
-        if(playerSumTotal > 21){
-            busted = true;
-            std::cout << "YOU BUSTED\n";
-        }
-        i = i + 1;
-    }
-    }while(Hit_or_stay(HOS) == "Hit" && busted != true);
+    
+    player_HitsOrStay(playerSumTotal);
+
 
 }
 std::string GameUti::type_to_string(card_t type){
@@ -141,7 +127,42 @@ void GameUti::add_player_card(){
     int b = distr(gen);
     player_hand.push_back(cards[b]);
 }
-
+void GameUti::player_HitsOrStay(int playerSumTotal){
+    do{
+    std::cout << '\n' << "Please type 1 to Hit or 0 to stay: ";
+    std::cin >> HOS;
+    if(GameUti::Hit_or_stay(HOS) == "Hit"){
+        add_player_card();
+        if(player_hand[i].type != card_t::num){
+            std::cout << "New Card: " << type_to_string(player_hand[i].type);
+        }
+        else if(player_hand[i].type == card_t::num){
+            std::cout << "New Card: " << player_hand[i].value;
+        }
+        playerSumTotal = playerSumTotal + player_hand[i].value;
+        std::cout << "\nNew Total: " << playerSumTotal << '\n';
+        if(playerSumTotal > 21){
+            busted = true;
+            std::cout << "YOU BUSTED\n";
+        }
+        i = i + 1;
+    }
+    }while(Hit_or_stay(HOS) == "Hit" && busted != true);
+}
+void GameUti::dealer_HitsOrStay(int dealerSumTotal){
+    i = 2;
+    if(dealerSumTotal < 17){
+        if(player_hand[i].type != card_t::num){
+            std::cout << "Dealer's New Card: " << type_to_string(dealer_hand[i].type);
+        }
+        else if(player_hand[i].type == card_t::num){
+            std::cout << "Dealer's New Card: " << dealer_hand[i].value;
+        }
+        dealerSumTotal = dealerSumTotal + dealer_hand[i].value;
+        std::cout << "\nNew Total: " << dealerSumTotal << '\n';
+        i = i + 1;
+    }
+}
 int main()
 {
     GameUti* g = new GameUti();
