@@ -21,7 +21,8 @@ class GameUti{
         double Money;
         double Bet;
         int i = 2;
-        bool busted = false;
+        bool PlayerBusted = false;
+        bool DealerBusted = false;
         std::random_device randnum;
         std::vector<card> dealer_hand;
         std::vector<card> player_hand;
@@ -47,6 +48,7 @@ class GameUti{
         void add_player_card();
         void player_HitsOrStay(int playerSumTotal);
         void dealer_HitsOrStay(int dealerSumTotal);
+        void finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money);
         std::string type_to_string(card_t type);
         std::string Hit_or_stay(std::string HOS);
 };
@@ -58,6 +60,7 @@ void GameUti::start(){
     std::cin >> Bet;
     std::cout << "\n************************** Distributing Cards ****************************\n";
 
+    add_dealer_card();
     add_dealer_card();
     add_player_card();
     add_player_card();
@@ -92,7 +95,11 @@ void GameUti::start(){
     std::cout << "YOUR TOTAL AMOUNT: " << playerSumTotal;
     
     player_HitsOrStay(playerSumTotal);
-
+    std::cout << "************************ Dealer's Turn *************************\n";
+    dealer_HitsOrStay(dealerSumTotal);
+    std::cout << "*********************** Tallying Results ***********************\n";
+    finalResult(playerSumTotal, dealerSumTotal, Bet, Money);
+    std::cout << "\n****************************************************************";
 
 }
 std::string GameUti::type_to_string(card_t type){
@@ -142,25 +149,68 @@ void GameUti::player_HitsOrStay(int playerSumTotal){
         playerSumTotal = playerSumTotal + player_hand[i].value;
         std::cout << "\nNew Total: " << playerSumTotal << '\n';
         if(playerSumTotal > 21){
-            busted = true;
+            PlayerBusted = true;
             std::cout << "YOU BUSTED\n";
         }
         i = i + 1;
     }
-    }while(Hit_or_stay(HOS) == "Hit" && busted != true);
+    }while(Hit_or_stay(HOS) == "Hit" && PlayerBusted != true);
 }
 void GameUti::dealer_HitsOrStay(int dealerSumTotal){
     i = 2;
-    if(dealerSumTotal < 17){
+    std::cout << "Dealer's Second Card: ";
+     if(dealer_hand[1].type != card_t::num){
+        std::cout << type_to_string(dealer_hand[1].type);
+    }
+    else if(dealer_hand[1].type == card_t::num){
+        std::cout << dealer_hand[1].value;
+    }
+    do{
+        add_dealer_card();
         if(player_hand[i].type != card_t::num){
-            std::cout << "Dealer's New Card: " << type_to_string(dealer_hand[i].type);
+            std::cout << "\nDealer Hits! \n" << "Dealer's New Card: " << type_to_string(dealer_hand[i].type);
         }
         else if(player_hand[i].type == card_t::num){
-            std::cout << "Dealer's New Card: " << dealer_hand[i].value;
+            std::cout << "\nDealer Hits! \n" << "Dealer's New Card: " << dealer_hand[i].value;
         }
         dealerSumTotal = dealerSumTotal + dealer_hand[i].value;
         std::cout << "\nNew Total: " << dealerSumTotal << '\n';
         i = i + 1;
+    }while(dealerSumTotal < 17);
+    do{
+        std::cout << "Dealer Chooses to stay with a total of: " << dealerSumTotal << '\n';
+    }while(dealer_hand[i].value >= 17 && dealer_hand[i].value <= 21);
+    if(dealerSumTotal > 21){
+        DealerBusted = true;
+        std::cout << "Dealer Busted\n";
+    }
+}
+void GameUti::finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money){
+
+    if(DealerBusted || PlayerBusted){
+    if(DealerBusted && !PlayerBusted){
+        std::cout << "You Win! Payout: $" << Bet;
+        Money = Money + Bet;
+        std::cout << "\nNew Balence: $" << Money;
+    }else if(!DealerBusted && PlayerBusted){
+        std::cout << "You Loose! Payout: -$" << Bet;
+        Money = Money - Bet;
+        std::cout << "\nNew Balence: $" << Money;
+    }
+    }
+    if(!DealerBusted && !PlayerBusted){
+    if(playerSumTotal > dealerSumTotal){
+        std::cout << "You Win! Payout: $" << Bet;
+         Money = Money + Bet;
+         std::cout << "\nNew Balence: $" << Money; 
+    }else if(playerSumTotal < dealerSumTotal){
+        std::cout << "You Loose! Payout: -$" << Bet;
+        Money = Money - Bet;
+        std::cout << "\nNew Balence: $" << Money;
+    }else if(playerSumTotal == dealerSumTotal){
+        std::cout << "You Tied! No Payout!\n";
+        std::cout << "New Balence: " << Money;
+    }
     }
 }
 int main()
