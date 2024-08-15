@@ -54,6 +54,8 @@ class GameUti{
 };
 
 void GameUti::start(){
+    
+    do{
     std::cout << "************************** WELCOME TO THE TABLE **************************\n";
     std::cout << "Balence: $" << Money << '\n';
     std::cout << "What Would you like to bet? \n$";
@@ -100,7 +102,7 @@ void GameUti::start(){
     std::cout << "*********************** Tallying Results ***********************\n";
     finalResult(playerSumTotal, dealerSumTotal, Bet, Money);
     std::cout << "\n****************************************************************";
-
+    }while(Money > 0);
 }
 std::string GameUti::type_to_string(card_t type){
     switch(type){
