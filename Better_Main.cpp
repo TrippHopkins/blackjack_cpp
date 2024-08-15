@@ -18,7 +18,7 @@ struct card{
 };
 class GameUti{
     public:
-        double Money;
+        double Money = 1500;
         double Bet;
         int i = 2;
         bool PlayerBusted = false;
@@ -32,7 +32,7 @@ class GameUti{
             {2, card_t::num},
             {3, card_t::num},
             {4, card_t::num},
-            {5, card_t::num},
+            {5, card_t::num}, 
             {6, card_t::num},
             {7, card_t::num},
             {8, card_t::num},
@@ -43,20 +43,19 @@ class GameUti{
             {10, card_t::King},
         }};
         
-        void start();
+        void start(int playerSumTotal, int dealerSumTotal);
         void add_dealer_card();
         void add_player_card();
         void player_HitsOrStay(int playerSumTotal);
         void dealer_HitsOrStay(int dealerSumTotal);
-        void finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money);
+        double finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money);
         std::string type_to_string(card_t type);
         std::string Hit_or_stay(std::string HOS);
 };
 
-void GameUti::start(){
-    
+void GameUti::start(int playerSumTotal, int dealerSumTotal){
     do{
-    std::cout << "************************** WELCOME TO THE TABLE **************************\n";
+    std::cout << "\n************************** WELCOME TO THE TABLE **************************\n";
     std::cout << "Balence: $" << Money << '\n';
     std::cout << "What Would you like to bet? \n$";
     std::cin >> Bet;
@@ -96,13 +95,26 @@ void GameUti::start(){
     int dealerSumTotal = (dealer_hand[0].value + dealer_hand[1].value);
     std::cout << "YOUR TOTAL AMOUNT: " << playerSumTotal;
     
+    
     player_HitsOrStay(playerSumTotal);
     std::cout << "************************ Dealer's Turn *************************\n";
-    dealer_HitsOrStay(dealerSumTotal);
+    if(!PlayerBusted){
+        dealer_HitsOrStay(dealerSumTotal);
+    }else if(PlayerBusted){
+        std::cout << "*********************** Tallying Results ***********************\n";
+        std::cout << "You Loose! Payout: -$" << Bet;
+        Money = Money - Bet;
+        std::cout << "\nNew Balence: $" << Money << '\n';
+    }
     std::cout << "*********************** Tallying Results ***********************\n";
     finalResult(playerSumTotal, dealerSumTotal, Bet, Money);
     std::cout << "\n****************************************************************";
     }while(Money > 0);
+    if(playerSumTotal > dealerSumTotal){
+         Money = Money + Bet;
+    }else if(playerSumTotal < dealerSumTotal){
+        Money = Money - Bet;
+    }
 }
 std::string GameUti::type_to_string(card_t type){
     switch(type){
@@ -187,7 +199,7 @@ void GameUti::dealer_HitsOrStay(int dealerSumTotal){
         std::cout << "Dealer Busted\n";
     }
 }
-void GameUti::finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money){
+double GameUti::finalResult(int playerSumTotal, int dealerSumTotal, double Bet, double Money){
 
     if(DealerBusted || PlayerBusted){
     if(DealerBusted && !PlayerBusted){
@@ -214,12 +226,12 @@ void GameUti::finalResult(int playerSumTotal, int dealerSumTotal, double Bet, do
         std::cout << "New Balence: " << Money;
     }
     }
+    return Money;
 }
-int main()
+int main(int playerSumTotal, int dealerSumTotal)
 {
     GameUti* g = new GameUti();
-    g->Money = 1500;
-    g->start();
+    g->start(playerSumTotal, dealerSumTotal);
 
     return 0;
 }
